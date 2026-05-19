@@ -1,0 +1,6 @@
+CREATE TABLE IF NOT EXISTS document_vectors (
+  id SERIAL PRIMARY KEY,
+  content TEXT NOT NULL,
+  vector TEXT NOT NULL,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);

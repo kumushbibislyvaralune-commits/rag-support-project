@@ -1,0 +1,58 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model User {
+  id             Int            @id @default(autoincrement())
+  email          String         @unique
+  password       String
+  createdAt      DateTime       @default(now())
+
+  conversations  Conversation[]
+  documents      Document[]
+}
+
+model Conversation {
+  id          Int        @id @default(autoincrement())
+  title       String
+  createdAt   DateTime   @default(now())
+
+  userId      Int
+  user        User       @relation(fields: [userId], references: [id])
+
+  messages    Message[]
+}
+
+model Message {
+  id               Int           @id @default(autoincrement())
+  role             String
+  content          String
+  createdAt        DateTime      @default(now())
+
+  conversationId   Int
+  conversation     Conversation  @relation(fields: [conversationId], references: [id])
+}
+
+model Document {
+  id          Int              @id @default(autoincrement())
+  filename    String
+  createdAt   DateTime         @default(now())
+
+  userId      Int
+  user        User             @relation(fields: [userId], references: [id])
+
+  vectors     DocumentVector[]
+}
+
+model DocumentVector {
+  id          Int        @id @default(autoincrement())
+  text        String
+  embedding   String
+
+  documentId  Int
+  document    Document   @relation(fields: [documentId], references: [id])
+}
